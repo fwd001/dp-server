@@ -1,0 +1,16 @@
+# vscode 安装 REST Client 插件
+
+@host = http://localhost:5000
+@token = adsfasdfasdfadsfasdfasdfas
+@contentType = application/json
+
+### add request
+POST {{host}}/api/user/add HTTP/1.1
+Content-Type: {{contentType}}
+
+{
+    "roomId": 0,
+    "username":"testNametestNamete"
+}
+
+###

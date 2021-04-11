@@ -1,5 +1,8 @@
 const Koa = require('koa')
 const Router = require('koa-router')
+const bodyParser = require('koa-bodyparser')
+
+
 // 实例化
 const app = new Koa()
 const router = new Router()
@@ -7,17 +10,17 @@ const router = new Router()
 const server = require('http').createServer(app.callback())
 const io = require('socket.io')(server, { cors: true })
 
-// 引入test路由
-const test = require('./router/api/test')
+// 引入user路由
+const user = require('./router/api/user')
 
-const socketCallback = require('./socket/index')
+// 连入socketio
+require('./socket/index')(io)
 
-// socket连接
-io.of('/client').on('connection', socketCallback);
+
 
 // 解决跨域
 app.use(async (ctx, next) => {
-    ctx.set('Access-Control-Allow-Origin', '*');
+    ctx.set('Access-Control-Allow-Origin', 'http://localhost:3000');
     ctx.set('Access-Control-Allow-Headers', 'Content-Type, Content-Length, Authorization, Accept, X-Requested-With , yourHeaderFeild');
     ctx.set('Access-Control-Allow-Methods', 'PUT, POST, GET, DELETE, OPTIONS');
     if (ctx.method == 'OPTIONS') {
@@ -27,13 +30,17 @@ app.use(async (ctx, next) => {
     }
 });
 
+// 使用ctx.body解析中间件
+app.use(bodyParser())
+
 
 // 路由监听
-router.use('/api', test)
+router.use('/api/user', user)
 router.get('/', async ctx => {
     ctx.status = 200
     ctx.body = { msg: 'home' }
 })
+
 
 // 配置路由
 app.use(router.routes()).use(router.allowedMethods())
