@@ -5,7 +5,7 @@ class Room {
     constructor(id) {
         this.id = id // 唯一id，也是房间号，同socket 连接号
         this.playerList = [] // 玩家数组
-        this.game = new Game // 游戏实例 控制游戏进度，游戏游戏状态的实例
+        this.game = new Game() // 游戏实例 控制游戏进度，游戏游戏状态的实例
         this.socket = null
     }
 
